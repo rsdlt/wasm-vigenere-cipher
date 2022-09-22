@@ -22,35 +22,53 @@ use sycamore::prelude::*;
 
 #[component]
 fn App<G: Html>(cx: Scope) -> View<G> {
-    let name = create_signal(cx, String::new());
-    let hello_r = cipher::new_hello();
+    let key = "RUST IS COOL";
 
-    let displayed_name = || {
-        if name.get().is_empty() {
+    let phrase = create_signal(cx, String::new());
+    let encr_signal = create_signal(cx, String::new());
+    let decr_signal = create_signal(cx, String::new());
+
+    let disp_phrase = || {
+        if phrase.get().is_empty() {
+            encr_signal.set("".to_string());
+            decr_signal.set("".to_string());
             "".to_string()
         } else {
-            name.get().as_ref().clone()
+            encr_signal.set(encrypt(&phrase.get().as_ref().clone(), key));
+            decr_signal.set(decrypt(&encr_signal.get().as_ref().clone(), key));
+            phrase.get().as_ref().clone()
+        }
+    };
+    let disp_encr = || {
+        if encr_signal.get().is_empty() {
+            "not encrypted".to_string()
+        } else {
+            encr_signal.get().as_ref().clone()
+        }
+    };
+    let disp_decr = || {
+        if decr_signal.get().is_empty() {
+            "not decrypted".to_string()
+        } else {
+            decr_signal.get().as_ref().clone()
         }
     };
 
     view! { cx,
         div {
-            h2 {
-                "Real-Time Vigénere Cipher"
-                // "! "
-                // (hello_r)
-            }
-            p { input(placeholder="Enter a phrase", bind:value=name) }
-            p { strong{"Key: "} (displayed_name())}
-            p { strong{"Encrypted: "} (displayed_name())}
-            p { strong{"Decrypted: "} (displayed_name())}
+            h2 { "Real-Time Vigénere Cipher" }
+
+            p { input(placeholder="Enter a phrase", bind:value=phrase) }
+
+            p { strong{"Key: "} (key) }
+
+            p { strong{"Encrypted: "} (disp_encr()) }
+            p { strong{"Decrypted: "} (disp_decr()) }
+            p { strong{"Phrase: "} (disp_phrase()) }
         }
     }
 }
 
 fn main() {
-    // console_error_panic_hook::set_once();
-    // console_log::init_with_level(log::Level::Debug).unwrap();
-
     sycamore::render(|cx| view! { cx, App {} });
 }

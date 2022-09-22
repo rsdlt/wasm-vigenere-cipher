@@ -54,8 +54,8 @@ fn new_vig_matrix() -> VigMatrix {
     let mut mat: VigMatrix = [[' '; 26]; 26];
     let mut acc = ('A'..='Z').cycle();
 
-    for r in 0..=25 {
-        for c in 0..=25 {
+    for r in 0..mat.len() {
+        for c in 0..mat.len() {
             mat[r][c] = acc.next().unwrap();
         }
         acc.next();
@@ -74,14 +74,14 @@ fn complete_key(key: &str, msg_size: usize) -> String {
 }
 
 fn remove_spaces(s: &str) -> String {
-    let sr: Vec<_> = s.trim().split_whitespace().collect();
+    let mut sr: Vec<_> = s.trim().split_whitespace().collect();
     sr.join("")
 }
 
-fn encrypt(msg: &str, key: &str) -> String {
+pub(crate) fn encrypt(msg: &str, key: &str) -> String {
     // clean message and key
-    let msg = &remove_spaces(msg);
-    let key = &remove_spaces(key);
+    let mut msg = &remove_spaces(msg);
+    let mut key = &remove_spaces(key);
 
     // get size of message and key
     let msg_size = msg.chars().count();
@@ -111,8 +111,8 @@ fn encrypt(msg: &str, key: &str) -> String {
 
 pub(crate) fn decrypt(encr_msg: &str, key: &str) -> String {
     // clean message and key
-    let encr_msg = &remove_spaces(encr_msg);
-    let key = &remove_spaces(key);
+    let mut encr_msg = &remove_spaces(encr_msg);
+    let mut key = &remove_spaces(key);
 
     // get size of message and key
     let msg_size = encr_msg.chars().count();
@@ -135,8 +135,8 @@ pub(crate) fn decrypt(encr_msg: &str, key: &str) -> String {
     // decrypt message
     for letter in 0..msg_size {
         let mut msg_idx = 0;
-        let key_idx = idx_finder(key_chars[letter]).unwrap();
-        for c in 0..=25 {
+        let mut key_idx = idx_finder(key_chars[letter]).unwrap();
+        for c in 0..vig_mat.len() {
             if vig_mat[key_idx][c] == msg_chars[letter] {
                 msg_idx = c;
             }
@@ -145,20 +145,4 @@ pub(crate) fn decrypt(encr_msg: &str, key: &str) -> String {
     }
 
     decrypted_msg
-}
-
-use std::fmt::Display;
-
-pub struct Hello {
-    name: String,
-}
-pub fn new_hello() -> Hello {
-    Hello {
-        name: "Rodrigo".to_string(),
-    }
-}
-impl Display for Hello {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}", self.name)
-    }
 }
