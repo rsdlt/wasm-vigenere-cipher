@@ -10,10 +10,14 @@ except according to those terms.
 
 use std::fmt::Display;
 
-const SIZE: usize = 225;
+pub(crate) const SIZE: usize = 225;
 type VigMatrix = [[char; SIZE]; SIZE];
-pub(crate) struct DictWrap(pub(crate) Vec<char>);
 
+// Define wrappers, used for printing.
+pub(crate) struct DictWrap(pub(crate) Vec<char>);
+pub(crate) struct VigMatrixWrap(pub(crate) VigMatrix);
+
+// Define error codes.
 #[derive(Debug)]
 pub(crate) enum ErrorCode {
     InvalidChar(char),
@@ -28,6 +32,40 @@ impl Display for DictWrap {
             s = write!(f, "{}", self.0.iter().next().unwrap());
         }
         return s;
+    }
+}
+
+impl DictWrap {
+    // Return the dictionary in String form.
+    pub(crate) fn get_string(self) -> String {
+        let mut s = String::new();
+        for c in self.0 {
+            s.push(c);
+        }
+        return s;
+    }
+}
+
+impl VigMatrixWrap {
+    // Render the VigMatrix in HTML and return as a String.
+    pub(crate) fn get_web_render(self) -> String {
+        let mut s = "<table>".to_string();
+        for r in 0..self.0.len() {
+            s.push_str("<tr>");
+            for c in 0..self.0.len() {
+                s.push_str("<td>");
+                s.push(self.0[r][c]);
+                // print!("{} ", m[r][c]);
+                s.push_str("</td>");
+            }
+            // println!("");
+            s.push_str("</tr>");
+        }
+        s.push_str("</table>");
+        return s;
+    }
+    pub(crate) fn new_vig_matrix_wrap() -> Self {
+        VigMatrixWrap(new_vig_matrix())
     }
 }
 
@@ -92,14 +130,33 @@ fn vig_matcher(m: &VigMatrix, ch_m: char, ch_k: char) -> Result<char, ErrorCode>
     Ok(m[idx_r][idx_c])
 }
 
-// Prints a Vigenere matrix
-fn print_vig_matrix(m: &VigMatrix) {
+// Renders a Vigenere matrix in the console
+pub(crate) fn render_vig_matrix_console(m: &VigMatrix) {
     for r in 0..m.len() {
         for c in 0..m.len() {
             print!("{} ", m[r][c]);
         }
         println!("");
     }
+}
+
+// Renders a Vigenere matrix in the Web
+pub(crate) fn print_vig_matrix_web(m: &VigMatrix) -> String {
+    let mut s = "<table>".to_string();
+    for r in 0..m.len() {
+        s.push_str("<tr>");
+        for c in 0..m.len() {
+            s.push_str("<td>");
+            s.push(m[r][c]);
+            // print!("{} ", m[r][c]);
+            s.push_str("</td>");
+        }
+        // println!("");
+        s.push_str("</tr>");
+    }
+    s.push_str("</table>");
+
+    return s;
 }
 
 fn complete_key(key: &str, msg_size: usize) -> String {
