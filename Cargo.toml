@@ -7,3 +7,13 @@ edition = "2021"
 
 [dependencies]
 sycamore = "0.8.1"
+
+[profile.release]
+# no backtrace for panic on release
+panic = 'abort'
+# optimize all codegen units
+codegen-units = 1
+# optimize aggressively for size
+opt-level = 'z'
+# enable link time optimization
+lto = true
