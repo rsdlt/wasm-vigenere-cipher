@@ -8,12 +8,28 @@ option. This file may not be copied, modified, or distributed
 except according to those terms.
 */
 
-type VigMatrix = [[char; 26]; 26];
+const SIZE: usize = 95;
+type VigMatrix = [[char; SIZE]; SIZE];
+
+// Creates and returns a new Vigenere Matrix
+fn new_vig_matrix() -> VigMatrix {
+    let mut mat: VigMatrix = [[' '; SIZE]; SIZE];
+    let mut acc = (' '..='~').cycle();
+
+    for r in 0..mat.len() {
+        for c in 0..mat.len() {
+            mat[r][c] = acc.next().unwrap();
+        }
+        acc.next();
+    }
+    // print_vig_matrix(&mat);
+    mat
+}
 
 // Returns the index value of a char in the Vigenere matrix
-fn idx_finder(ch: char) -> Option<usize> {
-    for (idx, chi) in ('A'..='Z').enumerate() {
-        if ch == chi {
+fn idx_finder(ch: char, m: &VigMatrix) -> Option<usize> {
+    for (idx, chi) in m[0].iter().enumerate() {
+        if ch == *chi {
             return Some(idx);
         }
     }
@@ -21,10 +37,10 @@ fn idx_finder(ch: char) -> Option<usize> {
 }
 
 // Returns the char value of an index in the Vigenere matrix
-fn char_finder(idx: usize) -> Option<char> {
-    for (idi, chi) in ('A'..='Z').enumerate() {
+fn char_finder(idx: usize, m: &VigMatrix) -> Option<char> {
+    for (idi, chi) in m[0].iter().enumerate() {
         if idx == idi {
-            return Some(chi);
+            return Some(*chi);
         }
     }
     None
@@ -33,8 +49,8 @@ fn char_finder(idx: usize) -> Option<char> {
 // Returns the matching character in the Vigenere matrix, depending
 // on the header (ch_m) and column (ch_k) characters provided
 fn vig_matcher(m: &VigMatrix, ch_m: char, ch_k: char) -> char {
-    let idx_c = idx_finder(ch_m).unwrap();
-    let idx_r = idx_finder(ch_k).unwrap();
+    let idx_c = idx_finder(ch_m, &m).unwrap();
+    let idx_r = idx_finder(ch_k, &m).unwrap();
 
     m[idx_r][idx_c]
 }
@@ -49,21 +65,6 @@ fn print_vig_matrix(m: &VigMatrix) {
     }
 }
 
-// Creates and returns a new Vigenere Matrix
-fn new_vig_matrix() -> VigMatrix {
-    let mut mat: VigMatrix = [[' '; 26]; 26];
-    let mut acc = ('A'..='Z').cycle();
-
-    for r in 0..mat.len() {
-        for c in 0..mat.len() {
-            mat[r][c] = acc.next().unwrap();
-        }
-        acc.next();
-    }
-
-    mat
-}
-
 fn complete_key(key: &str, msg_size: usize) -> String {
     let mut key_chars = key.chars().cycle();
     let mut new_key = "".to_string();
@@ -73,16 +74,7 @@ fn complete_key(key: &str, msg_size: usize) -> String {
     new_key
 }
 
-fn remove_spaces(s: &str) -> String {
-    let mut sr: Vec<_> = s.trim().split_whitespace().collect();
-    sr.join("")
-}
-
 pub(crate) fn encrypt(msg: &str, key: &str) -> String {
-    // clean message and key
-    let mut msg = &remove_spaces(msg);
-    let mut key = &remove_spaces(key);
-
     // get size of message and key
     let msg_size = msg.chars().count();
     let key_size = key.chars().count();
@@ -98,8 +90,8 @@ pub(crate) fn encrypt(msg: &str, key: &str) -> String {
     }
 
     // convert to char vectors
-    let key_chars: Vec<_> = key_e.to_string().to_uppercase().chars().collect();
-    let msg_chars: Vec<_> = msg.to_string().to_uppercase().chars().collect();
+    let key_chars: Vec<_> = key_e.to_string().chars().collect();
+    let msg_chars: Vec<_> = msg.to_string().chars().collect();
 
     // encrypt message
     for i in 0..msg_size {
@@ -110,10 +102,6 @@ pub(crate) fn encrypt(msg: &str, key: &str) -> String {
 }
 
 pub(crate) fn decrypt(encr_msg: &str, key: &str) -> String {
-    // clean message and key
-    let mut encr_msg = &remove_spaces(encr_msg);
-    let mut key = &remove_spaces(key);
-
     // get size of message and key
     let msg_size = encr_msg.chars().count();
     let key_size = key.chars().count();
@@ -129,19 +117,19 @@ pub(crate) fn decrypt(encr_msg: &str, key: &str) -> String {
     }
 
     // convert to char vectors
-    let key_chars: Vec<_> = key_e.to_string().to_uppercase().chars().collect();
-    let msg_chars: Vec<_> = encr_msg.to_string().to_uppercase().chars().collect();
+    let key_chars: Vec<_> = key_e.to_string().chars().collect();
+    let msg_chars: Vec<_> = encr_msg.to_string().chars().collect();
 
     // decrypt message
     for letter in 0..msg_size {
         let mut msg_idx = 0;
-        let mut key_idx = idx_finder(key_chars[letter]).unwrap();
+        let mut key_idx = idx_finder(key_chars[letter], &vig_mat).unwrap();
         for c in 0..vig_mat.len() {
             if vig_mat[key_idx][c] == msg_chars[letter] {
                 msg_idx = c;
             }
         }
-        decrypted_msg.push(char_finder(msg_idx).unwrap());
+        decrypted_msg.push(char_finder(msg_idx, &vig_mat).unwrap());
     }
 
     decrypted_msg
