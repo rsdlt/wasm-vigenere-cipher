@@ -41,14 +41,14 @@ fn App<G: Html>(cx: Scope) -> View<G> {
     };
     let disp_encr = || {
         if encr_signal.get().is_empty() {
-            "not encrypted".to_string()
+            "".to_string()
         } else {
             encr_signal.get().as_ref().clone()
         }
     };
     let disp_decr = || {
         if decr_signal.get().is_empty() {
-            "not decrypted".to_string()
+            "".to_string()
         } else {
             decr_signal.get().as_ref().clone()
         }
@@ -56,15 +56,21 @@ fn App<G: Html>(cx: Scope) -> View<G> {
 
     view! { cx,
         div {
-            h2 { "Real-Time Vigénere Cipher" }
-
-            p { input(placeholder="Enter a phrase", bind:value=phrase) }
+            h1 { "Real-Time Vigénere Cipher" }
 
             p { strong{"Key: "} (key) }
+            p { textarea(placeholder="Enter a phrase", rows="1", bind:value=phrase) }
+            // small { "Allowed characters: "  }
 
             p { strong{"Encrypted: "} (disp_encr()) }
             p { strong{"Decrypted: "} (disp_decr()) }
-            p { strong{"Phrase: "} (disp_phrase()) }
+            p { strong{"Original: "} (disp_phrase()) }
+
+
+            footer {
+               p {"Copyright 2022, " a(href="https://rsdlt.github.io/about/"){"Rodrigo Santiago"}}
+               p { a(href="https://rsdlt.github.io/about/#terms-of-use"){"Terms of use"} }
+            }
         }
     }
 }

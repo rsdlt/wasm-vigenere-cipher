@@ -12,7 +12,7 @@ const SIZE: usize = 95;
 type VigMatrix = [[char; SIZE]; SIZE];
 
 // Creates and returns a new Vigenere Matrix
-fn new_vig_matrix() -> VigMatrix {
+pub(crate) fn new_vig_matrix() -> VigMatrix {
     let mut mat: VigMatrix = [[' '; SIZE]; SIZE];
     let mut acc = (' '..='~').cycle();
 
