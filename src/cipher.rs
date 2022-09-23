@@ -8,22 +8,49 @@ option. This file may not be copied, modified, or distributed
 except according to those terms.
 */
 
-const SIZE: usize = 95;
+use std::fmt::Display;
+
+const SIZE: usize = 223;
 type VigMatrix = [[char; SIZE]; SIZE];
+pub(crate) struct DictWrap(pub(crate) Vec<char>);
+
+// Function to display the dictionary using a Wrapper
+impl Display for DictWrap {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let mut s = write!(f, "");
+        for _ in 0..self.0.len() {
+            s = write!(f, "{}", self.0.iter().next().unwrap());
+        }
+        return s;
+    }
+}
+
+// Creates and returns a new dictionary for the Vigenere Matrix
+pub(crate) fn new_dictionary() -> DictWrap {
+    let mut v: Vec<char> = Vec::with_capacity(SIZE);
+    for i in 0..=255 {
+        if !char::from_u32(i).unwrap().is_control() {
+            v.push(char::from_u32(i).unwrap());
+        }
+    }
+    return DictWrap(v);
+}
 
 // Creates and returns a new Vigenere Matrix
 pub(crate) fn new_vig_matrix() -> VigMatrix {
     let mut mat: VigMatrix = [[' '; SIZE]; SIZE];
-    let mut acc = (' '..='~').cycle();
+    // let mut acc = (' '..='~').cycle();
+    let binding = new_dictionary().0;
+    let mut acc = binding.iter().cycle();
 
     for r in 0..mat.len() {
         for c in 0..mat.len() {
-            mat[r][c] = acc.next().unwrap();
+            mat[r][c] = *acc.next().unwrap();
         }
         acc.next();
     }
     // print_vig_matrix(&mat);
-    mat
+    return mat;
 }
 
 // Returns the index value of a char in the Vigenere matrix

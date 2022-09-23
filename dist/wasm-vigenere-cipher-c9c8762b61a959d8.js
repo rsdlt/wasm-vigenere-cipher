@@ -510,7 +510,7 @@ function initSync(module) {
 
 async function init(input) {
     if (typeof input === 'undefined') {
-        input = new URL('wasm-vigenere-cipher-7f3a9539bc0ce329_bg.wasm', import.meta.url);
+        input = new URL('wasm-vigenere-cipher-c9c8762b61a959d8_bg.wasm', import.meta.url);
     }
     const imports = getImports();
 
