@@ -472,7 +472,7 @@ function getImports() {
     imports.wbg.__wbindgen_throw = function(arg0, arg1) {
         throw new Error(getStringFromWasm0(arg0, arg1));
     };
-    imports.wbg.__wbindgen_closure_wrapper405 = function(arg0, arg1, arg2) {
+    imports.wbg.__wbindgen_closure_wrapper413 = function(arg0, arg1, arg2) {
         const ret = makeMutClosure(arg0, arg1, 3, __wbg_adapter_18);
         return addHeapObject(ret);
     };
@@ -510,7 +510,7 @@ function initSync(module) {
 
 async function init(input) {
     if (typeof input === 'undefined') {
-        input = new URL('wasm-vigenere-cipher-c9c8762b61a959d8_bg.wasm', import.meta.url);
+        input = new URL('wasm-vigenere-cipher-57ef6e618becf0a_bg.wasm', import.meta.url);
     }
     const imports = getImports();
 

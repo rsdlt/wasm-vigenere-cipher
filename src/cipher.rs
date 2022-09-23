@@ -14,6 +14,12 @@ const SIZE: usize = 223;
 type VigMatrix = [[char; SIZE]; SIZE];
 pub(crate) struct DictWrap(pub(crate) Vec<char>);
 
+#[derive(Debug)]
+pub(crate) enum ErrorCode {
+    InvalidChar(char),
+    InvalidIndex(usize),
+}
+
 // Function to display the dictionary using a Wrapper
 impl Display for DictWrap {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -54,32 +60,32 @@ pub(crate) fn new_vig_matrix() -> VigMatrix {
 }
 
 // Returns the index value of a char in the Vigenere matrix
-fn idx_finder(ch: char, m: &VigMatrix) -> Option<usize> {
+fn idx_finder(ch: char, m: &VigMatrix) -> Result<usize, ErrorCode> {
     for (idx, chi) in m[0].iter().enumerate() {
         if ch == *chi {
-            return Some(idx);
+            return Ok(idx);
         }
     }
-    None
+    Err(ErrorCode::InvalidChar(ch))
 }
 
 // Returns the char value of an index in the Vigenere matrix
-fn char_finder(idx: usize, m: &VigMatrix) -> Option<char> {
+fn char_finder(idx: usize, m: &VigMatrix) -> Result<char, ErrorCode> {
     for (idi, chi) in m[0].iter().enumerate() {
         if idx == idi {
-            return Some(*chi);
+            return Ok(*chi);
         }
     }
-    None
+    Err(ErrorCode::InvalidIndex(idx))
 }
 
 // Returns the matching character in the Vigenere matrix, depending
 // on the header (ch_m) and column (ch_k) characters provided
-fn vig_matcher(m: &VigMatrix, ch_m: char, ch_k: char) -> char {
-    let idx_c = idx_finder(ch_m, &m).unwrap();
-    let idx_r = idx_finder(ch_k, &m).unwrap();
+fn vig_matcher(m: &VigMatrix, ch_m: char, ch_k: char) -> Result<char, ErrorCode> {
+    let idx_c = idx_finder(ch_m, &m)?;
+    let idx_r = idx_finder(ch_k, &m)?;
 
-    m[idx_r][idx_c]
+    Ok(m[idx_r][idx_c])
 }
 
 // Prints a Vigenere matrix
@@ -101,7 +107,7 @@ fn complete_key(key: &str, msg_size: usize) -> String {
     new_key
 }
 
-pub(crate) fn encrypt(msg: &str, key: &str) -> String {
+pub(crate) fn encrypt(msg: &str, key: &str) -> Result<String, ErrorCode> {
     // get size of message and key
     let msg_size = msg.chars().count();
     let key_size = key.chars().count();
@@ -122,13 +128,13 @@ pub(crate) fn encrypt(msg: &str, key: &str) -> String {
 
     // encrypt message
     for i in 0..msg_size {
-        encrypted_msg.push(vig_matcher(&vig_mat, msg_chars[i], key_chars[i]));
+        encrypted_msg.push(vig_matcher(&vig_mat, msg_chars[i], key_chars[i])?);
     }
 
-    encrypted_msg
+    Ok(encrypted_msg)
 }
 
-pub(crate) fn decrypt(encr_msg: &str, key: &str) -> String {
+pub(crate) fn decrypt(encr_msg: &str, key: &str) -> Result<String, ErrorCode> {
     // get size of message and key
     let msg_size = encr_msg.chars().count();
     let key_size = key.chars().count();
@@ -150,14 +156,14 @@ pub(crate) fn decrypt(encr_msg: &str, key: &str) -> String {
     // decrypt message
     for letter in 0..msg_size {
         let mut msg_idx = 0;
-        let mut key_idx = idx_finder(key_chars[letter], &vig_mat).unwrap();
+        let mut key_idx = idx_finder(key_chars[letter], &vig_mat)?;
         for c in 0..vig_mat.len() {
             if vig_mat[key_idx][c] == msg_chars[letter] {
                 msg_idx = c;
             }
         }
-        decrypted_msg.push(char_finder(msg_idx, &vig_mat).unwrap());
+        decrypted_msg.push(char_finder(msg_idx, &vig_mat)?);
     }
 
-    decrypted_msg
+    Ok(decrypted_msg)
 }

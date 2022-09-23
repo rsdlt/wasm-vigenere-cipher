@@ -22,20 +22,34 @@ use sycamore::prelude::*;
 
 #[component]
 fn App<G: Html>(cx: Scope) -> View<G> {
-    let key = "RUST IS COOL";
+    let key = "°¡! RüST íS CóÓL ¡!°";
 
     let phrase = create_signal(cx, String::new());
     let encr_signal = create_signal(cx, String::new());
     let decr_signal = create_signal(cx, String::new());
+    let warning = create_signal(cx, String::new());
 
     let disp_phrase = || {
         if phrase.get().is_empty() {
             encr_signal.set("".to_string());
             decr_signal.set("".to_string());
+            warning.set("".to_string());
             "".to_string()
         } else {
-            encr_signal.set(encrypt(&phrase.get().as_ref().clone(), key));
-            decr_signal.set(decrypt(&encr_signal.get().as_ref().clone(), key));
+            match encrypt(&phrase.get().as_ref().clone(), key) {
+                Ok(ok_phrase) => encr_signal.set(ok_phrase),
+                Err(error_kind) => match error_kind {
+                    ErrorCode::InvalidChar(ic) => warning.set(format!("Invalid character: {}", ic)),
+                    ErrorCode::InvalidIndex(ii) => warning.set(format!("Invalid index: {}", ii)),
+                },
+            }
+            match decrypt(&encr_signal.get().as_ref().clone(), key) {
+                Ok(ok_phrase) => decr_signal.set(ok_phrase),
+                Err(error_kind) => match error_kind {
+                    ErrorCode::InvalidChar(ic) => warning.set(format!("Invalid character: {}", ic)),
+                    ErrorCode::InvalidIndex(ii) => warning.set(format!("Invalid index: {}", ii)),
+                },
+            }
             phrase.get().as_ref().clone()
         }
     };
@@ -53,19 +67,28 @@ fn App<G: Html>(cx: Scope) -> View<G> {
             decr_signal.get().as_ref().clone()
         }
     };
+    let disp_warning = || {
+        if warning.get().is_empty() {
+            "".to_string()
+        } else {
+            warning.get().as_ref().clone()
+        }
+    };
 
     view! { cx,
         div {
             h1 { "Real-Time Vigénere Cipher" }
 
             p { strong{"Key: "} "[" span(style="color:Tomato; font-family:'Courier New'"){(key)} "]" }
-            // p { textarea(placeholder="Enter a phrase", rows="1", bind:value=phrase) }
-            p { input(placeholder="Enter a phrase", size="80", bind:value=phrase) }
-            p { small{"Original: " (disp_phrase())} }
-            // small { "Allowed characters: "  }
 
-            p { strong{"Encrypted: "} "[" span(style="color:Tomato; font-family:'Courier New'"){(disp_encr())} "]" }
-            p { strong{"Decrypted: "} "[" span(style="color:MediumSeaGreen;"){(disp_decr())} "]" }
+            p { input(placeholder="Enter a phrase", size="80", bind:value=phrase) }
+
+            p { small{"Original: " (disp_phrase())} }
+
+            p { strong{"Encoded: "} "[" span(style="color:Tomato; font-family:'Courier New'"){(disp_encr())} "]" }
+            p { strong{"Decoded: "} "[" span(style="color:MediumSeaGreen;"){(disp_decr())} "]" }
+
+            p { span(style="color:Tomato"){(disp_warning())}}
 
             footer {
                p {"Copyright 2022, " a(href="https://rsdlt.github.io/about/"){"Rodrigo Santiago"}}
