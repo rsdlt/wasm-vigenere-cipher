@@ -10,7 +10,7 @@ except according to those terms.
 
 use std::fmt::Display;
 
-const SIZE: usize = 223;
+const SIZE: usize = 225;
 type VigMatrix = [[char; SIZE]; SIZE];
 pub(crate) struct DictWrap(pub(crate) Vec<char>);
 
@@ -33,13 +33,17 @@ impl Display for DictWrap {
 
 // Creates and returns a new dictionary for the Vigenere Matrix
 pub(crate) fn new_dictionary() -> DictWrap {
-    let mut v: Vec<char> = Vec::with_capacity(SIZE);
+    let mut dict: Vec<char> = Vec::with_capacity(SIZE);
     for i in 0..=255 {
         if !char::from_u32(i).unwrap().is_control() {
-            v.push(char::from_u32(i).unwrap());
+            dict.push(char::from_u32(i).unwrap());
         }
     }
-    return DictWrap(v);
+    // push carriage return characters
+    dict.push(char::from_u32(10).unwrap());
+    dict.push(char::from_u32(13).unwrap());
+
+    return DictWrap(dict);
 }
 
 // Creates and returns a new Vigenere Matrix

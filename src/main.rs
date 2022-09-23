@@ -81,7 +81,7 @@ fn App<G: Html>(cx: Scope) -> View<G> {
 
             p { strong{"Key: "} "[" span(style="color:Tomato; font-family:'Courier New'"){(key)} "]" }
 
-            p { input(placeholder="Enter a phrase", size="50", bind:value=phrase) }
+            p { textarea(placeholder="Enter a phrase...", autofocus=true, maxlength="50000", bind:value=phrase) }
 
             p { small{"Original: " (disp_phrase())} }
 
