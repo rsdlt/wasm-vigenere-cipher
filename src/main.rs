@@ -58,18 +58,18 @@ fn App<G: Html>(cx: Scope) -> View<G> {
         div {
             h1 { "Real-Time Vigénere Cipher" }
 
-            p { strong{"Key: "} (key) }
+            p { strong{"Key: "} "[" span(style="color:Tomato; font-family:'Courier New'"){(key)} "]" }
             p { textarea(placeholder="Enter a phrase", rows="1", bind:value=phrase) }
+            p { small{"Original: " (disp_phrase())} }
             // small { "Allowed characters: "  }
 
-            p { strong{"Encrypted: "} (disp_encr()) }
-            p { strong{"Decrypted: "} (disp_decr()) }
-            p { strong{"Original: "} (disp_phrase()) }
+            p { strong{"Encrypted: "} "[" span(style="color:Tomato; font-family:'Courier New'"){(disp_encr())} "]" }
+            p { strong{"Decrypted: "} "[" span(style="color:MediumSeaGreen;"){(disp_decr())} "]" }
 
 
             footer {
                p {"Copyright 2022, " a(href="https://rsdlt.github.io/about/"){"Rodrigo Santiago"}}
-               p { a(href="https://rsdlt.github.io/about/#terms-of-use"){"Terms of use"} }
+               p { a(href="https://rsdlt.github.io/about/#terms-of-use"){"Terms of use and license"} }
             }
         }
     }
