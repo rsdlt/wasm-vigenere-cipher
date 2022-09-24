@@ -2,7 +2,15 @@
 
 A simple [Rust] and [WebAssembly] real-time implementation of the [Vigénere Cipher] utilizing the [Sycamore] reactive library, [Trunk] for build & bundle, and [Water.css] for styling.
 
-Check the [demo here].
+Check out the [demo here].
+
+The cipher supports 225 ASCII characters :
+
+![char support](/img/demo-1.gif)
+
+And handles non-supported chars gracefully:
+
+![error handling](/img/demo-2.gif)
 
 [WebAssembly]:https://webassembly.org/
 [Sycamore]:https://sycamore-rs.netlify.app/
