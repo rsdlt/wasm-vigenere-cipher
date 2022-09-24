@@ -112,10 +112,11 @@ fn App<G: Html>(cx: Scope) -> View<G> {
             p { strong{"Key: "} "[" span(style="color:Tomato; font-family:'Courier New';"){(key)} "]" }
 
             p { textarea(placeholder="Enter a phrase...", autofocus=true, maxlength="50000", bind:value=phrase) }
+            p { span(style="color:Tomato"){(disp_warning())}}
+
             p { strong{"Encoded: "} "[" span(style="color:Tomato; font-family:'Courier New';"){(disp_encr())} "]" }
             p { strong{"Decoded: "} "[" span(style="color:MediumSeaGreen; font-family:'Courier New';"){(disp_decr())} "]" }
 
-            p { span(style="color:Tomato"){(disp_warning())}}
 
             p { "The encoding dictionary includes the following set of " (SIZE) " ASCII characters:" br{}
               "[" span(style="color:Orchid;font-family:'Courier';"){(disp_dict())} "]" }
