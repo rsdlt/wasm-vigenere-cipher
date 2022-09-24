@@ -127,8 +127,8 @@ fn App<G: Html>(cx: Scope) -> View<G> {
             //    } }
 
             footer {
-               p {"Copyright 2022, " a(href="https://rsdlt.github.io/about/"){"Rodrigo Santiago"}}
-               p { a(href="https://rsdlt.github.io/about/#terms-of-use"){"Terms of use and license"} }
+                small{"Copyright 2022, " a(href="https://rsdlt.github.io/about/"){"Rodrigo Santiago"} ", " a(href="https://rsdlt.github.io/about/#terms-of-use"){"Terms of use"}}
+               p { a(href="https://github.com/rsdlt/wasm-vigenere-cipher"){"GitHub Repo"} }
             }
         }
     }
