@@ -47,7 +47,10 @@ fn App<G: Html>(cx: Scope) -> View<G> {
                 key,
                 mat_signal.get().as_ref().clone(),
             ) {
-                Ok(ok_phrase) => encr_signal.set(ok_phrase),
+                Ok(ok_phrase) => {
+                    encr_signal.set(ok_phrase);
+                    warning_signal.set("".to_string());
+                }
                 Err(error_kind) => match error_kind {
                     ErrorCode::InvalidChar(ic) => {
                         warning_signal.set(format!("Invalid character: {}", ic))
@@ -62,7 +65,9 @@ fn App<G: Html>(cx: Scope) -> View<G> {
                 key,
                 mat_signal.get().as_ref().clone(),
             ) {
-                Ok(ok_phrase) => decr_signal.set(ok_phrase),
+                Ok(ok_phrase) => {
+                    decr_signal.set(ok_phrase);
+                }
                 Err(error_kind) => match error_kind {
                     ErrorCode::InvalidChar(ic) => {
                         warning_signal.set(format!("Invalid character: {}", ic))

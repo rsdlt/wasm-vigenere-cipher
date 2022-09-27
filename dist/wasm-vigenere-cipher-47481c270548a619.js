@@ -456,7 +456,7 @@ function initSync(module) {
 
 async function init(input) {
     if (typeof input === 'undefined') {
-        input = new URL('wasm-vigenere-cipher-30be96da3dfae595_bg.wasm', import.meta.url);
+        input = new URL('wasm-vigenere-cipher-47481c270548a619_bg.wasm', import.meta.url);
     }
     const imports = getImports();
 
