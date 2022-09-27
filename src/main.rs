@@ -23,7 +23,7 @@ use sycamore::prelude::*;
 #[component]
 fn App<G: Html>(cx: Scope) -> View<G> {
     let key = "°¡! RüST íS CóÓL ¡!°";
-    let dict = new_dictionary().get_string();
+    let dict = DictWrap::new().get_string();
 
     // Signals declaration.
     let phrase = create_signal(cx, String::new());
@@ -31,7 +31,9 @@ fn App<G: Html>(cx: Scope) -> View<G> {
     let decr_signal = create_signal(cx, String::new());
     let warning_signal = create_signal(cx, String::new());
     let dict_signal = create_signal(cx, String::new());
+    let mat_signal = create_signal(cx, VigMatrixWrap::new());
 
+    // Memo declaration tied to phrase update in the textarea.
     let phrase_update = create_memo(cx, move || {
         if phrase.get().is_empty() {
             encr_signal.set("".to_string());
@@ -40,7 +42,11 @@ fn App<G: Html>(cx: Scope) -> View<G> {
             dict_signal.set(dict.clone());
             // vigmat_signal.set(vigmat_web_render.clone());
         } else {
-            match encrypt(&phrase.get().as_ref().clone(), key) {
+            match encode(
+                &phrase.get().as_ref().clone(),
+                key,
+                mat_signal.get().as_ref().clone(),
+            ) {
                 Ok(ok_phrase) => encr_signal.set(ok_phrase),
                 Err(error_kind) => match error_kind {
                     ErrorCode::InvalidChar(ic) => {
@@ -51,7 +57,11 @@ fn App<G: Html>(cx: Scope) -> View<G> {
                     }
                 },
             }
-            match decrypt(&encr_signal.get().as_ref().clone(), key) {
+            match decode(
+                &encr_signal.get().as_ref().clone(),
+                key,
+                mat_signal.get().as_ref().clone(),
+            ) {
                 Ok(ok_phrase) => decr_signal.set(ok_phrase),
                 Err(error_kind) => match error_kind {
                     ErrorCode::InvalidChar(ic) => {
@@ -93,17 +103,6 @@ fn App<G: Html>(cx: Scope) -> View<G> {
             warning_signal.get().as_ref().clone()
         }
     };
-    // Uncomment here, in phrase update and in view! to render the Vigenere Matrix in Html
-    //
-    // let disp_vigmat = || {
-    //     if vigmat_signal.get().is_empty() {
-    //         "".to_string()
-    //     } else {
-    //         vigmat_signal.get().as_ref().clone()
-    //     }
-    // };
-    // let vigmat_web_render = VigMatrixWrap::new_vig_matrix_wrap().get_web_render();
-    // let vigmat_signal = create_signal(cx, String::new());
 
     view! { cx,
         div {
@@ -120,12 +119,6 @@ fn App<G: Html>(cx: Scope) -> View<G> {
 
             p { "The encoding dictionary includes the following set of " (SIZE) " ASCII characters:" br{}
               "[" span(style="color:Orchid;font-family:'Courier';"){(disp_dict())} "]" }
-
-            // Uncomment to print the Html version of the Vigenere Matrix:
-            // p { "The Vigénere Cipher Matrix utilized is the following: " br{}
-            //    span(style="color:MintCream; font-family:'Courier New'; font-size:8px;"){
-            //         div(dangerously_set_inner_html=&(disp_vigmat()))
-            //    } }
 
             footer {
                 small{"Copyright 2022, " a(href="https://rsdlt.github.io/about/"){"Rodrigo Santiago"} ", " a(href="https://rsdlt.github.io/about/#terms-of-use"){"Terms of use"}}
