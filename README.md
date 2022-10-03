@@ -4,7 +4,7 @@ A simple [Rust] and [WebAssembly] real-time implementation of the [Vigénere Cip
 
 Check out the [demo here].
 
-The cipher supports 225 ASCII characters, all non-control plus `'\n'` and `'\r'`.
+The cipher supports 192 ASCII characters, all non-control plus `'\n'` and `'\r'`.
 
 ![char support](/img/demo-1.gif)
 
