@@ -60,7 +60,7 @@ fn App<G: Html>(cx: Scope) -> View<G> {
                     }
                 },
             }
-            match decode(
+            match decode_web(
                 &encr_signal.get().as_ref().clone(),
                 key,
                 mat_signal.get().as_ref().clone(),
@@ -110,27 +110,29 @@ fn App<G: Html>(cx: Scope) -> View<G> {
     };
 
     view! { cx,
-        div {
-            h1 { "Real-Time Vigénere Cipher" }
+            div {
+                h1 { "Real-Time Vigénere Cipher" }
 
-            p { strong{"Key: "} "[" span(style="color:Tomato; font-family:'Courier New';"){(key)} "]" }
+                p { strong{"Key: "} "[" span(style="color:Tomato; font-family:'Courier New';"){(key)} "]" }
 
-            p { textarea(placeholder="Enter a phrase...", autofocus=true, maxlength="50000", bind:value=phrase) }
-            p { span(style="color:Tomato"){(disp_warning())}}
+                p { textarea(placeholder="Enter a phrase...", autofocus=true, maxlength="50000", bind:value=phrase) }
+                p { span(style="color:Tomato"){(disp_warning())}}
 
-            p { strong{"Encoded: "} "[" span(style="color:Tomato; font-family:'Courier New';"){(disp_encr())} "]" }
-            p { strong{"Decoded: "} "[" span(style="color:MediumSeaGreen; font-family:'Courier New';"){(disp_decr())} "]" }
+                p { strong{"Encoded: "} br{}
+                    "[" span(style="color:Tomato; font-family:'Courier New';"){(disp_encr())} "]" }
+                p { strong{"Decoded: "} br{}
+                    "[" span(style="color:MediumSeaGreen; font-family:'Courier New';"){span(dangerously_set_inner_html=&(disp_decr()))} "]" }
 
+    // div(dangerously_set_inner_html=&(disp_vigmat()))
+                p { "The encoding dictionary includes the following set of " (SIZE) " ASCII characters:" br{}
+                  "[" span(style="color:Orchid;font-family:'Courier';"){(disp_dict())} "]" }
 
-            p { "The encoding dictionary includes the following set of " (SIZE) " ASCII characters:" br{}
-              "[" span(style="color:Orchid;font-family:'Courier';"){(disp_dict())} "]" }
-
-            footer {
-                small{"Copyright 2022, " a(href="https://rsdlt.github.io/about/"){"Rodrigo Santiago"} ", " a(href="https://rsdlt.github.io/about/#terms-of-use"){"Terms of use"}}
-               p { a(href="https://github.com/rsdlt/wasm-vigenere-cipher"){"GitHub Repo"} }
+                footer {
+                    small{"Copyright 2022, " a(href="https://rsdlt.github.io/about/"){"Rodrigo Santiago"} ", " a(href="https://rsdlt.github.io/about/#terms-of-use"){"Terms of use"}}
+                   p { a(href="https://github.com/rsdlt/wasm-vigenere-cipher"){"GitHub Repo"} }
+                }
             }
         }
-    }
 }
 
 fn main() {

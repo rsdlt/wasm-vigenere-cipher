@@ -167,6 +167,33 @@ pub(crate) fn decode(
     Ok(decrypted_msg)
 }
 
+// Decodes a message (msg) with a key (key) using a Vigenere Matrix (vig_mat).
+// Returns the blank space char ' ' as '&nbsp;' so that consecutive blank spaces
+// are rendered properly on the browser.
+pub(crate) fn decode_web(
+    enc_msg: &str,
+    key: &str,
+    vig_mat: VigMatrixWrap,
+) -> Result<String, ErrorCode> {
+    let decoded = decode(enc_msg, key, vig_mat)?;
+    let mut decoded_web = "".to_string();
+    for ch in decoded.chars() {
+        match ch {
+            ' ' => decoded_web.push_str("&nbsp;"),
+            '\n' | '\r' => decoded_web.push_str("<br>"),
+            _ => decoded_web.push(ch),
+        };
+        // if ch == ' ' {
+        //     decoded_web.push_str("&nbsp;");
+        // } else if ch == '\n' {
+        //     decoded_web.push_str("&NewLine;");
+        // } else {
+        //     decoded_web.push(ch);
+        // }
+    }
+    Ok(decoded_web)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

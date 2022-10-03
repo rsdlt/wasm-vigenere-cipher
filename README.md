@@ -8,9 +8,13 @@ The cipher supports 192 ASCII characters, all non-control plus `'\n'` and `'\r'`
 
 ![char support](/img/demo-1.gif)
 
-And handles non-supported chars gracefully:
+Handles non-supported chars gracefully:
 
 ![error handling](/img/demo-2.gif)
+
+And properly displays multiple continuous space characters and carriage return / new line:
+
+![space support](/img/demo-4.gif)
 
 [WebAssembly]:https://webassembly.org/
 [Sycamore]:https://sycamore-rs.netlify.app/
