@@ -8,7 +8,7 @@ option. This file may not be copied, modified, or distributed
 except according to those terms.
 */
 
-pub(crate) const SIZE: usize = 225;
+pub(crate) const SIZE: usize = 192;
 
 #[derive(Clone, Copy)]
 pub(crate) struct VigMatrixWrap(pub(crate) [[char; SIZE]; SIZE]);
@@ -26,7 +26,7 @@ pub(crate) enum ErrorCode {
 impl DictWrap {
     pub(crate) fn new() -> DictWrap {
         // Every ASCII character that !is_control().
-        let mut dict = r##" !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~ ¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ"##.to_string();
+        let mut dict = r##"!"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~ ¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ"##.to_string();
         // Add carriage return to support in web textarea.
         dict.push('\n');
         dict.push('\r');
@@ -165,4 +165,53 @@ pub(crate) fn decode(
     }
 
     Ok(decrypted_msg)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use pretty_assertions::{assert_eq, assert_ne};
+
+    #[test]
+    fn test_encode() {
+        let vig_mat = VigMatrixWrap::new();
+        let key = "°¡! RüST íS CóÓL ¡!°";
+        let message = "Hello, World!";
+        let encoded = encode(message, key, vig_mat).unwrap();
+        assert_eq!(message, decode(&encoded, key, vig_mat).unwrap());
+
+        let vig_mat = VigMatrixWrap::new();
+        let key = "°¡! RüST íS CóÓL ¡!°";
+        let message = "Martin K";
+        let encoded = encode(message, key, vig_mat).unwrap();
+        let decoded = decode(&encoded, key, vig_mat).unwrap();
+        // println!("key      :##{}##:", key);
+        // println!("message  :##{}##:", message);
+        // println!("encoded  :##{}##:", encoded);
+        // println!("decoded  :##{}##:", decoded);
+        assert_eq!(message, decoded);
+
+        let vig_mat = VigMatrixWrap::new();
+        let key = "°¡! RüST íS CóÓL ¡!°";
+        let message = "!!!!";
+        let encoded = encode(message, key, vig_mat).unwrap();
+        assert_eq!(message, decode(&encoded, key, vig_mat).unwrap());
+
+        let vig_mat = VigMatrixWrap::new();
+        let key = "°¡! RüST íS CóÓL ¡!°";
+        let message = "WhatisApp+éars to   be the   problem here__°¿¿¿¿¿!!!!++++{{{{{{{}}}}}}}";
+        let encoded = encode(message, key, vig_mat).unwrap();
+        assert_eq!(message, decode(&encoded, key, vig_mat).unwrap());
+    }
+
+    #[test]
+    fn test_complex() {
+        let vig_mat = VigMatrixWrap::new();
+        let key = "°¡! RüST íS CóÓL ¡!°";
+        let message = r##"´+++´[[[    {{{'''''""""()*&^   
+            $2374954904890~~~11939455    
+            7+a+e{eíóúúááÉú}"}}}]]]"##;
+        let encoded = encode(message, key, vig_mat).unwrap();
+        assert_eq!(message, decode(&encoded, key, vig_mat).unwrap());
+    }
 }
