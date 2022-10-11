@@ -22,7 +22,7 @@ pub(crate) enum ErrorCode {
     InvalidIndex(usize),
 }
 
-// Creates and returns a new dictionary for the Vigenere Matrix.
+// Creates and returns a new dictionary for the Vigenère Matrix.
 impl DictWrap {
     pub(crate) fn new() -> DictWrap {
         // Every ASCII character that !is_control().
@@ -34,7 +34,7 @@ impl DictWrap {
         for (idx, ch) in dict.chars().enumerate() {
             dict_char_arr[idx] = ch;
         }
-        return DictWrap(dict_char_arr);
+        DictWrap(dict_char_arr)
     }
 
     pub(crate) fn get_string(&self) -> String {
@@ -45,7 +45,7 @@ impl DictWrap {
         s
     }
 }
-// Creates and returns a new Vigenere Matrix.
+// Creates and returns a new Vigenère Matrix.
 impl VigMatrixWrap {
     pub(crate) fn new() -> VigMatrixWrap {
         let mut mat: VigMatrixWrap = VigMatrixWrap([[' '; SIZE]; SIZE]);
@@ -58,11 +58,11 @@ impl VigMatrixWrap {
             }
             acc.next();
         }
-        return mat;
+        mat
     }
 }
 
-// Returns the index value of a char in the Vigenere matrix.
+// Returns the index value of a char in the Vigenère Matrix.
 fn idx_finder(ch: char, m: &VigMatrixWrap) -> Result<usize, ErrorCode> {
     for (idx, chi) in m.0[0].iter().enumerate() {
         if ch == *chi {
@@ -72,7 +72,7 @@ fn idx_finder(ch: char, m: &VigMatrixWrap) -> Result<usize, ErrorCode> {
     Err(ErrorCode::InvalidChar(ch))
 }
 
-// Returns the char value of an index in the Vigenere matrix
+// Returns the char value of an index in the Vigenère Matrix
 fn char_finder(idx: usize, m: &VigMatrixWrap) -> Result<char, ErrorCode> {
     for (idi, chi) in m.0[0].iter().enumerate() {
         if idx == idi {
@@ -82,7 +82,7 @@ fn char_finder(idx: usize, m: &VigMatrixWrap) -> Result<char, ErrorCode> {
     Err(ErrorCode::InvalidIndex(idx))
 }
 
-// Returns the matching character in the Vigenere matrix, depending
+// Returns the matching character in the Vigenère Matrix, depending
 // on the header (ch_m) and column (ch_k) characters provided
 fn vig_matcher(m: &VigMatrixWrap, ch_m: char, ch_k: char) -> Result<char, ErrorCode> {
     let idx_c = idx_finder(ch_m, &m)?;
@@ -101,7 +101,7 @@ fn complete_key(key: &str, msg_size: usize) -> String {
     new_key
 }
 
-// Encodes a message (msg) with a key (key) using a Vigenere Matix (vig_mat).
+// Encodes a message (msg) with a key (key) using a Vigenère Matrix (vig_mat).
 pub(crate) fn encode(msg: &str, key: &str, vig_mat: VigMatrixWrap) -> Result<String, ErrorCode> {
     // get size of message and key
     let msg_size = msg.chars().count();
@@ -118,7 +118,7 @@ pub(crate) fn encode(msg: &str, key: &str, vig_mat: VigMatrixWrap) -> Result<Str
     }
 
     // convert to char vectors
-    let key_chars: Vec<_> = key_e.to_string().chars().collect();
+    let key_chars: Vec<_> = key_e.chars().collect();
     let msg_chars: Vec<_> = msg.to_string().chars().collect();
 
     // encrypt message
@@ -129,7 +129,7 @@ pub(crate) fn encode(msg: &str, key: &str, vig_mat: VigMatrixWrap) -> Result<Str
     Ok(encrypted_msg)
 }
 
-// Decodes an encoded message (enc_msg) with a key (key) and a Vigenere Matrix (vig_mat).
+// Decodes an encoded message (enc_msg) with a key (key) and a Vigenère Matrix (vig_mat).
 pub(crate) fn decode(
     enc_msg: &str,
     key: &str,
@@ -149,7 +149,7 @@ pub(crate) fn decode(
     }
 
     // convert to char vectors
-    let key_chars: Vec<_> = key_e.to_string().chars().collect();
+    let key_chars: Vec<_> = key_e.chars().collect();
     let msg_chars: Vec<_> = enc_msg.to_string().chars().collect();
 
     // decrypt message
@@ -167,7 +167,7 @@ pub(crate) fn decode(
     Ok(decrypted_msg)
 }
 
-// Decodes a message (msg) with a key (key) using a Vigenere Matrix (vig_mat).
+// Decodes a message (msg) with a key (key) using a Vigenère Matrix (vig_mat).
 // Returns the blank space char ' ' as '&nbsp;' so that consecutive blank spaces
 // are rendered properly on the browser.
 pub(crate) fn decode_web(
