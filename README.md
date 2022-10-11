@@ -4,17 +4,12 @@ A simple [Rust] and [WebAssembly] real-time implementation of the [Vigenère Cip
 
 Check out the [demo here].
 
-The cipher supports 192 ASCII characters, all non-control plus `'\n'` and `'\r'`.
+## Features:
+- The cipher supports 192 ASCII characters, all non-control plus `'\n'` and `'\r'`.
+- Handles non-supported chars gracefully.
+- Properly displays multiple continuous space characters and carriage return / new line:
 
-![char support](/img/demo-1.gif)
-
-Handles non-supported chars gracefully:
-
-![error handling](/img/demo-2.gif)
-
-And properly displays multiple continuous space characters and carriage return / new line:
-
-![space support](/img/demo-4.gif)
+![features](/img/demo-1.gif)
 
 [WebAssembly]:https://webassembly.org/
 [Sycamore]:https://sycamore-rs.netlify.app/
