@@ -111,7 +111,7 @@ fn App<G: Html>(cx: Scope) -> View<G> {
 
     view! { cx,
             div {
-                h1 { "Real-Time Vigénere Cipher" }
+                h1 { "Real-Time Vigenère Cipher" }
 
                 p { strong{"Key: "} "[" span(style="color:Tomato; font-family:'Courier New';"){(key)} "]" }
 
