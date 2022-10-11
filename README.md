@@ -9,7 +9,7 @@ Check out the [demo here].
 - Handles non-supported chars gracefully.
 - Properly displays multiple continuous space characters and carriage return / new line:
 
-![features](/img/demo-1.gif)
+![features](/img/demo-3.gif)
 
 [WebAssembly]:https://webassembly.org/
 [Sycamore]:https://sycamore-rs.netlify.app/
