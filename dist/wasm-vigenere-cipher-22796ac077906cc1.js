@@ -205,7 +205,7 @@ function makeMutClosure(arg0, arg1, dtor, f) {
     return real;
 }
 function __wbg_adapter_18(arg0, arg1, arg2) {
-    wasm._dyn_core__ops__function__FnMut__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__h66752e3dea5efb11(arg0, arg1, addHeapObject(arg2));
+    wasm._dyn_core__ops__function__FnMut__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__hd9947e561007e2d2(arg0, arg1, addHeapObject(arg2));
 }
 
 function getCachedStringFromWasm0(ptr, len) {
@@ -283,15 +283,15 @@ function getImports() {
         const ret = false;
         return ret;
     };
-    imports.wbg.__wbg_nodeId_06a564f20f396a52 = function(arg0, arg1) {
+    imports.wbg.__wbg_nodeId_bbf0efafa303e805 = function(arg0, arg1) {
         const ret = getObject(arg1).$$$nodeId;
         getInt32Memory0()[arg0 / 4 + 1] = isLikeNone(ret) ? 0 : ret;
         getInt32Memory0()[arg0 / 4 + 0] = !isLikeNone(ret);
     };
-    imports.wbg.__wbg_setnodeId_1f238c81d53de58e = function(arg0, arg1) {
+    imports.wbg.__wbg_setnodeId_433ef8ed15bd1612 = function(arg0, arg1) {
         getObject(arg0).$$$nodeId = arg1 >>> 0;
     };
-    imports.wbg.__wbg_createTextNode_5de401262c597e98 = function(arg0, arg1) {
+    imports.wbg.__wbg_createTextNode_a7d5f5b956acda97 = function(arg0, arg1) {
         const ret = getObject(arg0).createTextNode(arg1);
         return addHeapObject(ret);
     };
@@ -476,8 +476,8 @@ function getImports() {
     imports.wbg.__wbindgen_throw = function(arg0, arg1) {
         throw new Error(getStringFromWasm0(arg0, arg1));
     };
-    imports.wbg.__wbindgen_closure_wrapper654 = function(arg0, arg1, arg2) {
-        const ret = makeMutClosure(arg0, arg1, 84, __wbg_adapter_18);
+    imports.wbg.__wbindgen_closure_wrapper301 = function(arg0, arg1, arg2) {
+        const ret = makeMutClosure(arg0, arg1, 17, __wbg_adapter_18);
         return addHeapObject(ret);
     };
 
@@ -514,7 +514,7 @@ function initSync(module) {
 
 async function init(input) {
     if (typeof input === 'undefined') {
-        input = new URL('wasm-vigenere-cipher-6b9f718d5a481b05_bg.wasm', import.meta.url);
+        input = new URL('wasm-vigenere-cipher-22796ac077906cc1_bg.wasm', import.meta.url);
     }
     const imports = getImports();
 
