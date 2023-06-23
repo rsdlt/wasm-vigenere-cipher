@@ -3,38 +3,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
     <title>WebAssembly Vigenère Cipher</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/dark.css">
-    <link rel="icon" href="/rustacean-flat-happy-5688a64389869f26.svg">
-    <script type="module">import init from '/wasm-vigenere-cipher-9c3ec21ff1f48662.js';init('/wasm-vigenere-cipher-9c3ec21ff1f48662_bg.wasm');</script>
+    <link rel="icon" href="/rustacean-flat-happy-86989a1226cf0803.svg">
+    <script type="module">import init from '/wasm-vigenere-cipher-7a4a28989c90cb38.js';init('/wasm-vigenere-cipher-7a4a28989c90cb38_bg.wasm');</script>
   
-<link rel="preload" href="/wasm-vigenere-cipher-9c3ec21ff1f48662_bg.wasm" as="fetch" type="application/wasm" crossorigin="">
-<link rel="modulepreload" href="/wasm-vigenere-cipher-9c3ec21ff1f48662.js"></head>
+<link rel="preload" href="/wasm-vigenere-cipher-7a4a28989c90cb38_bg.wasm" as="fetch" type="application/wasm" crossorigin="">
+<link rel="modulepreload" href="/wasm-vigenere-cipher-7a4a28989c90cb38.js"></head>
   <body>
 
-<script>(function () {
-    var protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    var url = protocol + '//' + window.location.host + '/_trunk/ws';
-    var poll_interval = 5000;
-    var reload_upon_connect = () => {
-        window.setTimeout(
-            () => {
-                // when we successfully reconnect, we'll force a
-                // reload (since we presumably lost connection to
-                // trunk due to it being killed, so it will have
-                // rebuilt on restart)
-                var ws = new WebSocket(url);
-                ws.onopen = () => window.location.reload();
-                ws.onclose = reload_upon_connect;
-            },
-            poll_interval);
-    };
-
-    var ws = new WebSocket(url);
-    ws.onmessage = (ev) => {
-        const msg = JSON.parse(ev.data);
-        if (msg.reload) {
-            window.location.reload();
-        }
-    };
-    ws.onclose = reload_upon_connect;
-})()
-</script></body></html>
+</body></html>
